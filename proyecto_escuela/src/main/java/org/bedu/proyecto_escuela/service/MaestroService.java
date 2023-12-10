@@ -1,7 +1,10 @@
 package org.bedu.proyecto_escuela.service;
 
 import org.bedu.proyecto_escuela.dto.*;
+import org.bedu.proyecto_escuela.exception.AlumnoNotFoundException;
+import org.bedu.proyecto_escuela.exception.MaestroNotFoundException;
 import org.bedu.proyecto_escuela.mapper.MaestroMapper;
+import org.bedu.proyecto_escuela.model.Alumno;
 import org.bedu.proyecto_escuela.model.Maestro;
 import org.bedu.proyecto_escuela.repository.MaestroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +35,26 @@ public class MaestroService {
         return mapper.toDTO(entity);
     }
 
-    public MaestroDTO update(Long id, CreateMaestroDTO data) {
+    public void update(Long id, UpdateMaestroDTO data) throws MaestroNotFoundException {
         Optional<Maestro> maestroExistente = repository.findById(id);
         if (maestroExistente.isPresent()) {
             Maestro maestroActual = maestroExistente.get();
-            maestroActual.setNombre_maestro(data.getNombre_maestro());
-            return mapper.toDTO(repository.save(maestroActual));
+            //maestroActual.setNombre_maestro(data.getNombre_maestro());
+            mapper.update(maestroActual, data);
+            repository.save(maestroActual);
         }
-
-        return null;
+        else {
+            throw new MaestroNotFoundException(id);
+        }
     }
 
-    public void delete(Long id) {
-        repository.deleteById(id);
+    public void delete(Long id) throws MaestroNotFoundException{
+        Optional<Maestro> maestroExistente = repository.findById(id);
+        if (maestroExistente.isPresent()) {
+            repository.deleteById(id);
+        }
+        else {
+            throw new MaestroNotFoundException(id);
+        }
     }
 }
