@@ -53,8 +53,8 @@ public class AlumnoController {
     @Operation(summary = "Actualiza la información de un alumno")
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable("id") Long id,@Valid @RequestBody UpdateAlumnoDTO data) throws AlumnoNotFoundException {
-        service.update(id, data);
+    public AlumnoDTO update(@PathVariable("id") Long id,@Valid @RequestBody UpdateAlumnoDTO data) throws AlumnoNotFoundException {
+        return service.update(id, data);
     }
 
     @Operation(summary = "Elimina un alumno")

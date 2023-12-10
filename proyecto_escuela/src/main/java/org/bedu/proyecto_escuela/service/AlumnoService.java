@@ -35,7 +35,7 @@ public class AlumnoService {
         return mapper.toDTO(entity);
     }
 
-    public void update(Long id, UpdateAlumnoDTO data) throws AlumnoNotFoundException{
+    public AlumnoDTO update(Long id, UpdateAlumnoDTO data) throws AlumnoNotFoundException{
         Optional<Alumno> alumnoExistente = repository.findById(id);
         if (alumnoExistente.isPresent()) {
             Alumno alumnoActual = alumnoExistente.get();
@@ -48,7 +48,7 @@ public class AlumnoService {
             alumnoActual.setEmail(data.getEmail());
             */
             mapper.update(alumnoActual, data);
-            repository.save(alumnoActual);
+            return mapper.toDTO(repository.save(alumnoActual));
         }
         else {
             throw new AlumnoNotFoundException(id);

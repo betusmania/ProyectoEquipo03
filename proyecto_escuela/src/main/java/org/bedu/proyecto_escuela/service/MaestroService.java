@@ -35,13 +35,13 @@ public class MaestroService {
         return mapper.toDTO(entity);
     }
 
-    public void update(Long id, UpdateMaestroDTO data) throws MaestroNotFoundException {
+    public MaestroDTO update(Long id, UpdateMaestroDTO data) throws MaestroNotFoundException {
         Optional<Maestro> maestroExistente = repository.findById(id);
         if (maestroExistente.isPresent()) {
             Maestro maestroActual = maestroExistente.get();
             //maestroActual.setNombre_maestro(data.getNombre_maestro());
             mapper.update(maestroActual, data);
-            repository.save(maestroActual);
+            return mapper.toDTO(repository.save(maestroActual));
         }
         else {
             throw new MaestroNotFoundException(id);

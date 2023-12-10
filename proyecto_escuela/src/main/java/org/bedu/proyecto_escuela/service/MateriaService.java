@@ -51,7 +51,7 @@ public class MateriaService {
         */
     }
 
-    public void update(Long id, UpdateMateriaDTO data) throws MateriaNotFoundException, MaestroNotFoundException {
+    public MateriaDTO update(Long id, UpdateMateriaDTO data) throws MateriaNotFoundException, MaestroNotFoundException {
         Optional<Materia> materiaExistente = repository.findById(id);
         if (materiaExistente.isPresent()) {
             Optional<Maestro> maestroExistente = maestroRepository.findById(data.getId_maestro());
@@ -63,7 +63,7 @@ public class MateriaService {
             materiaActual.setMateria(data.getMateria());
             materiaActual.setId_maestro(data.getId_maestro());
             */
-                repository.save(materiaActual);
+                return mapper.toDTO(repository.save(materiaActual));
             }
             else {
                 throw new MaestroNotFoundException(data.getId_maestro());
